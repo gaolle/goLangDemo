@@ -1,3 +1,4 @@
+### Redis：
 
 键值存储系统，数据结构服务器，开源，原子操作，保存在内存中
 
@@ -23,16 +24,22 @@ redis-cli --raw
 set key value
 ```
 
-* 获取指定key的值
+* ##### 获取指定key的值
 
 ```bash
 get key
 ```
 
-* 设置指定值，返回旧值
+* ##### 设置指定值，返回旧值
 
 ```bash
 getset key value
+```
+
+* ##### 获取指定key所存储的字符串值的长度
+
+```bash
+strlen key 
 ```
 
 ##### Hash(哈希)  一个string类型的field和value的映射表 存储对象  field-value键值对
@@ -121,4 +128,8 @@ type key_name
 info 
 ```
 
-​	
+* ##### 追加指定值
+
+```bash
+append key value 
+```
