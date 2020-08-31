@@ -1,4 +1,4 @@
-#### Go Modules
+#### Go -> Go Modules
 
 ```shell
 GOPROXY=https://goproxy.cn,direct
