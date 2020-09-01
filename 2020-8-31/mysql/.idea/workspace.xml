@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="5f90f654-7d24-415a-91b7-eac98e6c7e3f" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/MySQL.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/mysql/mysql.go" beforeDir="false" />
-    </list>
+    <list default="true" id="5f90f654-7d24-415a-91b7-eac98e6c7e3f" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
