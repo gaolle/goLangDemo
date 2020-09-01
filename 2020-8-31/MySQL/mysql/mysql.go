@@ -9,190 +9,160 @@ import (
 // 数据库参数配置
 var (
 	db *sqlx.DB
-	dns string = "root:123456@tcp(192.168.196.227:3306)/users"
+	dns string = "root:password@tcp(127.0.0.1:3306)/users"
 )
 
 // 数据库表结构
-type user struct {
-	id int
-	name string
+type User struct {
+	Id int
+	Name string
 }
 
 // 连接数据库
-func initDB(driverName string, dataSourceName string) (err error) {
-	db, err = sqlx.Connect(driverName, dataSourceName)
+func init() () {
+	var err error
+	db, err = sqlx.Connect("mysql", dns)
 	if err != nil {
-		fmt.Println("connect DB failed", err)
-		return err
+		panic(err)
+		return
 	}
-	return err
+	if db != nil {
+		fmt.Println("connect DB")
+	}
 }
 
 // 根据id查询单条数据
-func queryId(id int) {
+func selectById(id int) (User, error) {
 	sqlStr := "select id, name from users_tbl where id=?"
-	var u user
+	var u User
 	rows, err := db.Query(sqlStr, id)
 	if err != nil {
-		fmt.Println(err)
-		return
+		fmt.Print("select id query: ", err)
 	}
 
 	defer rows.Close()
 	for rows.Next() {
-		err := rows.Scan(&u.id, &u.name)
+		err := rows.Scan(&u.Id, &u.Name)
 		if err != nil {
-			fmt.Println(err)
-			return
+			fmt.Println("select id scan: ", err)
 		}
-		fmt.Println(u.id, u.name)
 	}
 
 	err = rows.Err()
 	if err != nil {
-		fmt.Println(err)
-		return
+		fmt.Println("select id rows:", err)
 	}
+	return u, err
 }
 
 // 根据名字查询单条数据
-func queryName(name string) {
+func selectByName(name string) (User, error) {
 	sqlStr := "select id, name from users_tbl where name=?"
-	var u user
+	var u User
 	rows, err := db.Query(sqlStr, name)
 	if err != nil {
-		fmt.Println(err)
-		return
+		fmt.Println("select name query: ", err)
 	}
 	// 延后关闭
 	defer rows.Close()
 	for rows.Next() {
-		err := rows.Scan(&u.id, &u.name)
+		err := rows.Scan(&u.Id, &u.Name)
 		if err != nil {
-			fmt.Println(err)
-			return
+			fmt.Println("select name scan: ", err)
 		}
-		fmt.Println(u.id, u.name)
 	}
 	err = rows.Err()
 	if err != nil {
-		fmt.Println(err)
-		return
+		fmt.Println("select name rows: ", err)
 	}
+	return u, err
 }
 
 // 查询全部数据
-func queryAll()  {
+func selectAll()  {
 	sqlStr := "select * from users_tbl"
-	var u user
+	var u User
 	rows, err := db.Query(sqlStr)
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println("select all query: ", err)
 		return
 	}
 	defer rows.Close()
 	for rows.Next() {
-		err := rows.Scan(&u.id, &u.name)
+		err := rows.Scan(&u.Id, &u.Name)
 		if err != nil {
-			fmt.Println(err)
+			fmt.Println("select all scan: ", err)
 			return
 		}
-		fmt.Println(u.id, u.name)
+		fmt.Println("ID:", u.Id, "Name:", u.Name)
 	}
 	err = rows.Err()
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println("select all rows: ", err)
 		return
 	}
 }
 
 // 插入
-func insertIdName(id int, name string) {
+func insertIdAndName(id int, name string) error {
 	sqlStr := "INSERT INTO users_tbl (id, name) VALUES (?, ?)"
 	_, err := db.Exec(sqlStr, id, name)
 	if err != nil {
-		fmt.Println("inset failed", err)
-		return
+		fmt.Println("insert failed", err)
+		return err
 	}
+	return err
 }
 
 // 根据id更新数据
-func updateId(id int, name string) {
+func updateById(id int, name string) error {
 	sqlStr := "update users_tbl set name = ? where id = ?"
 	_, err := db.Exec(sqlStr, name, id)
 	if err != nil {
-		fmt.Println(err)
-		return
+		fmt.Println("update by id failed", err)
+		return err
 	}
+	return err
 }
 
 // 根据name更新数据
-func updateName(id int, name string) {
+func updateByName(id int, name string) error{
 	sqlStr := "update users_tbl set id = ? where name = ?"
 	_, err := db.Exec(sqlStr, name, id)
 	if err != nil {
-		fmt.Println(err)
-		return
+		fmt.Println("update by name failed", err)
+		return err
 	}
+	return err
 }
 
 // 根据id删除
-func deleteId(id int) {
+func deleteById(id int) error {
 	sqlStr := "delete from users_tbl where id = ?"
 	_, err := db.Exec(sqlStr, id)
 	if err != nil {
-		fmt.Println(err)
-		return
+		fmt.Println("delete by id failed", err)
+		return err
 	}
+	return err
 }
 
 // 根据name删除
-func deleteName(name string) {
+func deleteByName(name string) error {
 	sqlStr := "delete from users_tbl where name = ?"
 	_, err := db.Exec(sqlStr, name)
 	if err != nil {
-		fmt.Println(err)
-		return
+		fmt.Println("delete by name failed", err)
+		return err
 	}
+	return err
 }
 
 func main() {
-	err := initDB("mysql", dns)
-	if err != nil {
-		fmt.Println(err)
-		return
+	// 根据id查询单条数据
+	if u, err := selectById(4); err != nil {
+		fmt.Println("select by id failed")
 	} else {
-		fmt.Println("mysql连接成功")
-	}
-	{
-		fmt.Println("根据id单条查询")
-		queryId(1)
-		// 键值不区分大小写
-		fmt.Println("根据name单条查询")
-		queryName("G")
-		fmt.Println("全部查询")
-		queryAll()
-	}
-	{
-		queryAll()
-		fmt.Println("插入数据")
-		insertIdName(14, "gaolle")
-		queryAll()
-	}
-	{
-		queryAll()
-		fmt.Println("根据id更新数据")
-		updateId(5, "g")
-		fmt.Println("根据name更新数据")
-		updateName(5, "g")
-		queryAll()
-	}
-	{
-		queryAll()
-		fmt.Println("根据id删除")
-		deleteId(1)
-		fmt.Println("根据name删除")
-		deleteName("Gaolle")
-		queryAll()
+		fmt.Println("select by id success", u)
 	}
 }
