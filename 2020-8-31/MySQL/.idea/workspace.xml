@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="c17f5ee8-3f6f-472c-a6f9-b9f2d870a1d2" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/MySQL.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mysql/mysql.go" beforeDir="false" afterPath="$PROJECT_DIR$/mysql/mysql.go" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Go Application" />
+      </list>
+    </option>
+  </component>
+  <component name="GOROOT" path="E:\Users\Gaolele\sdk\go1.14.7" />
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+  </component>
+  <component name="ProjectId" id="1gqZpkCKH9YHMuQV5zfxquysgxp" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="DefaultGoTemplateProperty" value="Go Application" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="go.import.settings.migrated" value="true" />
+    <property name="go.sdk.automatically.set" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors.General" />
+  </component>
+  <component name="RunManager">
+    <configuration name="go build mysql.go" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
+      <module name="MySQL" />
+      <working_directory value="$PROJECT_DIR$" />
+      <kind value="FILE" />
+      <filePath value="$PROJECT_DIR$/mysql/mysql.go" />
+      <directory value="$PROJECT_DIR$" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Go Build.go build mysql.go" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="VgoProject">
+    <integration-enabled>true</integration-enabled>
+    <environment>
+      <map>
+        <entry key="GOPROXY" value="https://goproxy.cn,direct" />
+      </map>
+    </environment>
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="1043" y="195" key="FileChooserDialogImpl" timestamp="1598870560446">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="1043" y="195" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1598870560446" />
+    <state width="914" height="2" key="GridCell.Tab.0.bottom" timestamp="1598871537057">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="914" height="2" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1598871537057" />
+    <state width="914" height="2" key="GridCell.Tab.0.center" timestamp="1598871537057">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="914" height="2" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1598871537057" />
+    <state width="914" height="2" key="GridCell.Tab.0.left" timestamp="1598871537057">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="914" height="2" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1598871537057" />
+    <state width="914" height="2" key="GridCell.Tab.0.right" timestamp="1598871537057">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="914" height="2" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1598871537057" />
+    <state x="85" y="161" key="SettingsEditor" timestamp="1598871533145">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="85" y="161" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1598871533145" />
+  </component>
+</project>

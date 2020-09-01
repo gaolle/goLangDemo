@@ -1,0 +1,13 @@
+<component name="ProjectCodeStyleConfiguration">
+  <code_scheme name="Project" version="173">
+    <GoCodeStyleSettings>
+      <option name="ADD_PARENTHESES_FOR_SINGLE_IMPORT" value="true" />
+      <option name="ADD_LEADING_SPACE_TO_COMMENTS" value="true" />
+    </GoCodeStyleSettings>
+    <codeStyleSettings language="go">
+      <indentOptions>
+        <option name="TAB_SIZE" value="2" />
+      </indentOptions>
+    </codeStyleSettings>
+  </code_scheme>
+</component>
