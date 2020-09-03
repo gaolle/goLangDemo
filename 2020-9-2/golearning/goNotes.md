@@ -118,14 +118,14 @@ func main() {
 }
 ```
 
-方法（属于某一种类型，且有接收者），类型和方法处于同一包内
+方法（属于某一种类型，且有接收者），类型和方法处于同一包内 
 
 ```go
 type Use struct {
 	a, b int
 }
 
-// 将add绑定到Use类型
+// 将add绑定到Use类型 Use类型不能是接口类型或者接口指针列类型
 func (u Use) add() int {
 	return u.a + u.b
 }
@@ -241,6 +241,141 @@ func main() {
 	c := Circle{3}
 	fmt.Println("rect Area is", r.Area())
 	fmt.Println("circle Area is", c.Area())
+}
+```
+
+接口：一组方法的集合，不包含变量，不具体实现方法（接口定义方法，类型实现方法）
+
+接口是一种类型，可以创建接口类型的变量
+
+```go
+type User struct {
+	A, B int
+}
+
+// 类型和方法要在同一个包内 类型实现接口中的全部方法
+func (u User) Add() int {
+	return u.A + u.B
+}
+
+func (u User) Sub() int {
+	return int(math.Abs(float64(u.B - u.A)))
+}
+```
+
+```go
+type Operator interface {
+	Add() int
+	Sub() int
+}
+
+func main() {
+	var o Operator
+    // 接口的动态类型变为User
+	o = operator.User{A: 1, B: 2}
+	fmt.Println("add", o.Add()) //add 3
+	fmt.Println("sub", o.Sub()) //sub 1
+}
+```
+
+一种类型可以实现多个接口
+
+类型断言 
+
+```go
+// i为接口，Type是类型或接口 自动检测i的动态类型与Type是否一致
+i.(Type) 
+// val:Type所对应的值 ok:ture/false
+val, ok := i.(Type)
+```
+
+接口不能实现别的接口也不能继承，通过嵌套接口创建新的接口
+
+```go
+// 嵌套接口
+type Opts interface {
+	Operator
+}
+
+type Operator interface {
+	Add() int
+	Sub() int
+}
+
+func main() {
+	var opts Opts
+	// 类型赋值给接口
+	opts = operator.User{A: 1, B: 2}
+	fmt.Println("add", opts.Add()) // add 3
+}
+```
+
+Go语言通过携程实现并发，协程之间靠信道通信
+
+协程：轻量级线程 在方法或函数调用之前加上关键字 go
+
+信道(信道默认阻塞)
+
+```
+var c chan int
+c := make(chan int)
+c <- value
+value := <-c
+<-c
+```
+
+不能读写nil通道
+
+```go
+var c chan int
+// goroutine 1 [chan send (nil chan)]:
+// c <- 1
+// <- c
+```
+
+单向通道
+
+``` go
+// 单向发送
+var c chan<- int
+// 单向接收
+var c <-chan int
+```
+
+select没有输入值且只用于通道操作
+
+```go
+func send1(c chan string)  {
+	c <- "send1"
+}
+
+func send2(c chan string)  {
+	c <- "send2"
+}
+
+func main() {
+	c1 := make(chan string)
+	c2 := make(chan string)
+	go send1(c1)
+	go send2(c2)
+
+	// // select会阻塞
+	// select {
+	// case val := <- c1:
+	// 	fmt.Println(val)
+	// case val := <- c2:
+	// 	fmt.Println(val)
+	// }
+
+	// select不会阻塞
+	select {
+	case val := <- c1:
+		fmt.Println(val)
+	case val := <- c2:
+		fmt.Println(val)
+	default:
+		fmt.Println("no chan value")
+	}
 }
 ```
 
