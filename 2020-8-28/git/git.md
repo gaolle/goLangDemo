@@ -107,4 +107,18 @@ su - gaolle
   git push origin master
   ```
 
+* 强制拉取并覆盖本地代码
+
+  ```shell
+  git fetch --all
+  git reset --hard origin/master
+  git pull
+  ```
+
+* 放弃commit
+
+  ```shell
+  git reset --soft HEAD^
+  ```
+
   
