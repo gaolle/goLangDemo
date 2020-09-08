@@ -121,4 +121,22 @@ su - gaolle
   git reset --soft HEAD^
   ```
 
+* 删除分支
+
+  ```shell
+  git branch -D branchname
+  ```
+
+* 创建远程分支
+
+  ```shell
+  git checkout -b branchname origin/branchname
+  ```
+
+* 拉取远程
+
+  ```shell
+  git pull
+  ```
+
   
