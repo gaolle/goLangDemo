@@ -139,4 +139,41 @@ su - gaolle
   git pull
   ```
 
+  ```markdown
+  合并到proto
+  cd proto
+  git pull
+  git push
+  git merge origin/master
+  合并衝突
+  vim 解決衝突
+  git add 衝突文件
+  git commit
+  git push
+  
+  上傳之前先 pull
+  git pull
+  
+  合并主分支代碼
+  git merge origin/master
+  
+  error: Your local changes to the following files would be overwritten by merge:
+          go.mod
+          go.sum
+  Please commit your changes or stash them before you merge.
+  Aborting
+  解決方法
+  git stash
+  
+  在此合并
+  git merge origin/master
+  
+  
+  什么冲突之后 
+  修改冲突文件然后合并
+  git add
+  git commit
+  git push
+  ```
+  
   
