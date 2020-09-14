@@ -176,4 +176,11 @@ su - gaolle
   git push
   ```
   
+* 回复分支
+
+  ```shell
+  git reflog branchname
+  git reset --hard branchid(branchname@{1})
+  ```
+
   
