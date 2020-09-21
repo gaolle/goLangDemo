@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+// 定义包名
+package proto;
+
+// 定义user服务的接口
+service UserSrv {
+    // 获取用户账号信息
+    rpc GetAccount(GetAccountRequest) returns (Account) {}
+}
+
+// 定义获取账号信息的请求消息
+message GetAccountRequest {
+    int32 id = 1; // 用户id
+}
+
+// 定义用户账号消息
+message Account {
+    int32 id = 1;  // id
+    string username = 2; // 账号
+    string address = 3; // 地址
+    string phone =4; // 电话
+}

@@ -9,7 +9,7 @@ import (
 // 数据库参数配置
 var (
 	db *sqlx.DB
-	dns string = "root:password@tcp(127.0.0.1:3306)/users"
+	dns string = "root:123456@tcp(127.0.0.1:3306)/users"
 )
 
 // 数据库表结构
