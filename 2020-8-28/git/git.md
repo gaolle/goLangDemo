@@ -183,4 +183,10 @@ su - gaolle
   git reset --hard branchid(branchname@{1})
   ```
 
+  git merge --abort
   
+  取消本次merge 
+  
+* git stash 
+
+* git stash pop
