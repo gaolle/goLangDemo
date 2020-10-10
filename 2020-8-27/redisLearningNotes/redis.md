@@ -42,7 +42,7 @@ getset key value
 strlen key 
 ```
 
-##### Hash(哈希)  一个string类型的field和value的映射表 存储对象  field-value键值对
+##### Hash(哈希)  一个string类型的field和value的映射表 存储对象value为field-value键值对
 
 * ##### 设置
 

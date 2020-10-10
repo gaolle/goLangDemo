@@ -33,7 +33,7 @@ db.dropDatabase()
 插入集合中文档
 
 ```shell
-db.student.inset({name:'xiaoming', age:18})
+db.student.insert({name:'xiaoming', age:18})
 ```
 
 查看插入文档
