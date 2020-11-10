@@ -213,7 +213,7 @@ OK
 (error) ERR wrong number of arguments for 'incrby' command
 ```
 
-##### INCRBYFLOAT
+#### INCRBYFLOAT
 
 浮点数
 
@@ -246,4 +246,717 @@ OK
 127.0.0.1:6379>
 ```
 
-http://redisdoc.com/string/msetnx.html
+### 哈希
+
+#### HSET
+
+```shell
+#不存在创建，返回创建的个数 设置多个field
+127.0.0.1:6379> HSET keyhset f v f1 v1
+(integer) 2
+127.0.0.1:6379> HGET keyhset f
+"v"
+#field	存在，覆盖，返回创建的个数即0
+127.0.0.1:6379> HSET keyhset f val
+(integer) 0
+127.0.0.1:6379> HGET keyhset f
+"val"
+```
+
+#### HSETNX
+
+```shell
+127.0.0.1:6379> HGET keyhset f
+"val"
+#field存在，放弃 返回0
+127.0.0.1:6379> HSETNX keyhset f v
+(integer) 0
+127.0.0.1:6379> hget keyhset f
+"val"
+#field不存在，创建并返回1 
+127.0.0.1:6379> HSETNX keyhsetnx f v
+(integer) 1
+127.0.0.1:6379> HGET keyhsetnx f
+"v"
+```
+
+#### HEXISTS
+
+```shell
+#检查 filed是否存在 存在返回1
+127.0.0.1:6379> HEXISTS keyhset f3
+(integer) 1
+#检查 filed是否存在 不存在返回0
+127.0.0.1:6379> HEXISTS keyhset f2
+(integer) 0
+```
+
+#### HEGT
+
+```shell
+#field存在返回值
+127.0.0.1:6379> HGET keyhset f
+"val"
+#不存在返回nil
+127.0.0.1:6379> HGET keyhset ff
+(nil)
+```
+
+#### HDEL
+
+```shell
+127.0.0.1:6379> HGET keyhset f
+"val"
+127.0.0.1:6379> HGET keyhset f1
+"v1"
+#field存在，返回删除field的个数
+127.0.0.1:6379> HDEL keyhset f f1
+(integer) 2
+127.0.0.1:6379> HGET keyhset f1
+(nil)
+127.0.0.1:6379> HGET keyhset f
+(nil)
+#field不存在，返回0
+127.0.0.1:6379> HDEL keyhset fff
+(integer) 0
+```
+
+#### HLEN
+
+```shell
+#key存在返回域的个数
+127.0.0.1:6379> HLEN keyhset
+(integer) 1
+127.0.0.1:6379> HKEYS keyhset
+1) "f3"
+#key不存在返回0
+127.0.0.1:6379> HLEN keyhlen
+(integer) 0
+```
+
+#### HSTRLEN
+
+```shell
+#key或者field不存在 返回0
+127.0.0.1:6379> HSTRLEN keyset f3
+(integer) 0
+#key中的field存在 返回对应字符串长度
+127.0.0.1:6379> HSTRLEN keyhset f3
+(integer) 1
+```
+
+#### HINCRBY
+
+```shell
+127.0.0.1:6379> HGET keyhset f3
+"v"
+#value为字符串报错
+127.0.0.1:6379> HINCRBY keyhset f3 1
+(error) ERR hash value is not an integer
+#不存在 创建 返回field的值
+127.0.0.1:6379> HINCRBY keyhincrby f 1
+(integer) 1
+127.0.0.1:6379> HGET keyhincrby f
+"1"
+127.0.0.1:6379> HINCRBY keyhincrby f 2
+(integer) 3
+127.0.0.1:6379> HGET keyhincrby f
+"3"
+```
+
+#### HINCRBYFLOAT
+
+浮点数自增
+
+#### HMSET
+
+```shell
+#设置多个field-value 不存在创建返回ok 存在时覆盖返回ok 不要求全匹配
+127.0.0.1:6379> HMSET keyhmset f v f1 v1
+OK
+127.0.0.1:6379> HGET keyhmset f
+"v"
+127.0.0.1:6379> HGET keyhmset f1
+"v1"
+127.0.0.1:6379> HMSET keyhmset f val f2 v2
+OK
+127.0.0.1:6379> HGET keyhmset f
+"val"
+127.0.0.1:6379> HGET keyhmset f2
+"v2"
+```
+
+#### HMGET
+
+```shell
+#返回key中field的值，不存在返回nil
+127.0.0.1:6379> HMGET keyhmset f f1 f2 f3
+1) "val"
+2) "v1"
+3) "v2"
+4) (nil)
+```
+
+#### HKEYS
+
+```shell
+#存在 返回key中所有的域
+127.0.0.1:6379> HKEYS keyhmset
+1) "f"
+2) "f1"
+3) "f2"
+#不存在 返回空
+127.0.0.1:6379> HKEYS keyhkeys
+(empty array)
+```
+
+#### HVALS
+
+```shell
+#存在 返回key中的所有值
+127.0.0.1:6379> HVALS keyhmset
+1) "val"
+2) "v1"
+3) "v2"
+#不存在 返回空
+127.0.0.1:6379> HVALS keyhvals
+(empty array)
+127.0.0.1:6379>
+```
+
+#### HGETALL
+
+```shell
+#存在 返回key中所有的filed value
+127.0.0.1:6379> HGETALL keyhmset
+1) "f"
+2) "val"
+3) "f1"
+4) "v1"
+5) "f2"
+6) "v2"
+#不存在 返回空列表
+127.0.0.1:6379> HGETALL keyhgetall
+(empty array)
+```
+
+### 列表
+
+#### LPUSH
+
+```shell
+#不存在创建，返回列表中所有元素的个数  压入顺序从左到右 每次压入列表头
+127.0.0.1:6379> LPUSH keypush e e1 e2
+(integer) 3
+127.0.0.1:6379> LPUSH keypush e
+(integer) 4
+127.0.0.1:6379> LRANGE keypush 0 -1
+1) "e"
+2) "e2"
+3) "e1"
+4) "e"
+```
+
+#### LPUSHX
+
+```shell
+#key存在 压入 返回列表所有元素的个数 压入头部
+127.0.0.1:6379> LPUSHX keypush epush
+(integer) 5
+127.0.0.1:6379> LRANGE keypush 0 -1
+1) "epush"
+2) "e"
+3) "e2"
+4) "e1"
+5) "e"
+#key不存在 不操作 返回0
+127.0.0.1:6379> LPUSHX keypushx epush
+(integer) 0
+```
+
+#### RPUSH
+
+```shell
+#压入尾部
+127.0.0.1:6379> RPUSH keypush er
+(integer) 6
+127.0.0.1:6379> LRANGE keypush 0 -1
+1) "epush"
+2) "e"
+3) "e2"
+4) "e1"
+5) "e"
+6) "er"
+```
+
+#### RPUSHX
+
+与LPUSHX只有压入顺序不同
+
+#### LPOP
+
+```shell
+#移除并返回列表的头元素
+127.0.0.1:6379> LPOP keypush
+"epush"
+127.0.0.1:6379> LRANGE keypush 0 -1
+1) "e"
+2) "e2"
+3) "e1"
+4) "e"
+5) "er"
+#key 不存在返回nil
+127.0.0.1:6379> LPOP keypush1
+(nil)
+```
+
+#### RPOP
+
+尾部移除
+
+#### RPOPLPUSH
+
+移除并返回列表的尾元素
+
+```shell
+#取出第一个key的尾部压入第二个key的头部
+127.0.0.1:6379> RPOPLPUSH keypush keydes
+"er"
+127.0.0.1:6379> LRANGE keypush 0 -1
+1) "e"
+2) "e2"
+3) "e1"
+4) "e"
+127.0.0.1:6379> LRANGE keydes 0 -1
+1) "er"
+#自旋状态 取出尾部压入头部 可以用于遍历 时间复杂度为0(1)
+127.0.0.1:6379> RPOPLPUSH keypush keypush
+"e"
+127.0.0.1:6379> LRANGE keypush 0 -1
+1) "e"
+2) "e"
+3) "e2"
+4) "e1"
+127.0.0.1:6379> RPOPLPUSH keypush keypush
+"e1"
+127.0.0.1:6379> LRANGE keypush 0 -1
+1) "e1"
+2) "e"
+3) "e"
+4) "e2"
+#当第一个key不存在时，返回nil
+127.0.0.1:6379> RPOPLPUSH keypush1 keypush
+(nil)
+```
+
+#### LREM
+
+```shell
+#key不存在 返回0
+127.0.0.1:6379> LREM keypush1 1 e
+(integer) 0
+#key存在 count > 0 从头部移除count个element 返回移除个数
+127.0.0.1:6379> LREM keypush 1 e
+(integer) 1
+127.0.0.1:6379> LRANGE keypush 0 -1
+1) "e"
+2) "e"
+3) "e"
+4) "e"
+5) "e"
+6) "e1"
+7) "e"
+8) "e"
+9) "e2"
+#key存在 count < 0 从尾部移除count个element 返回移除个数
+127.0.0.1:6379> LREM keypush -1 e
+(integer) 1
+127.0.0.1:6379> LRANGE keypush 0 -1
+1) "e"
+2) "e"
+3) "e"
+4) "e"
+5) "e"
+6) "e1"
+7) "e"
+8) "e2"
+```
+
+#### LLEN
+
+```shell
+#key 存在 返回列表的个数
+127.0.0.1:6379> LLEN keypush
+(integer) 8
+#key 不存在 返回0
+127.0.0.1:6379> LLEN keypush1
+(integer) 0
+```
+
+#### LINDEX
+
+```shell
+127.0.0.1:6379> LRANGE keypush 0 -1
+1) "e"
+2) "e"
+3) "e"
+4) "e"
+5) "e"
+6) "e1"
+7) "e"
+8) "e2"
+#返回 列表中index位置的元素 从0开始 负数从0开始
+127.0.0.1:6379> LINDEX keypush 0
+"e"
+127.0.0.1:6379> LINDEX keypush -1
+"e2"
+#当index超过列表数时，返回nil
+127.0.0.1:6379> LINDEX keypush 10
+(nil)
+```
+
+#### LINSERT
+
+```shell
+#key存在 AFTER 在e的之后插入eee 只会检索到第一个
+127.0.0.1:6379> LINSERT keypush AFTER e eee
+(integer) 9
+127.0.0.1:6379> LRANGE keypush 0 -1
+1) "e"
+2) "eee"
+3) "e"
+4) "e"
+5) "e"
+6) "e"
+7) "e1"
+8) "e"
+9) "e2"
+#key存在 BEFORE 在e的之前插入eee 只会检索到第一个
+127.0.0.1:6379> LINSERT keypush BEFORE e eee
+(integer) 10
+127.0.0.1:6379> LRANGE keypush 0 -1
+ 1) "eee"
+ 2) "e"
+ 3) "eee"
+ 4) "e"
+ 5) "e"
+ 6) "e"
+ 7) "e"
+ 8) "e1"
+ 9) "e"
+10) "e2"
+#key存在 检索值不存在 返回-1
+127.0.0.1:6379> LINSERT keypush BEFORE ee eee
+(integer) -1
+#key不存在 返回0
+127.0.0.1:6379> LINSERT keypush1 BEFORE ee eee
+(integer) 0
+```
+
+#### LSET
+
+```shell
+#key 存在 将index=0位置元素设为eset
+127.0.0.1:6379> LSET keypush 0 eset
+OK
+127.0.0.1:6379> LRANGE keypush 0 -1
+ 1) "eset"
+ 2) "e"
+ 3) "eee"
+ 4) "e"
+ 5) "e"
+ 6) "e"
+ 7) "e"
+ 8) "e1"
+ 9) "e"
+10) "e2"
+#key存在 index超出或不存在 返回错误
+127.0.0.1:6379> LSET keypush 11 eset
+(error) ERR index out of range
+#key不存在 返回错误
+127.0.0.1:6379> LSET keypush1 11 eset
+(error) ERR no such key
+```
+
+#### LRANGE
+
+```shell
+#检索一定范围的值 从0开始 -1 代表尾部 闭区间 只能正向检索
+127.0.0.1:6379> LRANGE keypush 0 -1
+ 1) "eset"
+ 2) "e"
+ 3) "eee"
+ 4) "e"
+ 5) "e"
+ 6) "e"
+ 7) "e"
+ 8) "e1"
+ 9) "e"
+10) "e2"
+127.0.0.1:6379> LRANGE keypush 0 100
+ 1) "eset"
+ 2) "e"
+ 3) "eee"
+ 4) "e"
+ 5) "e"
+ 6) "e"
+ 7) "e"
+ 8) "e1"
+ 9) "e"
+10) "e2"
+127.0.0.1:6379> LRANGE keypush -1 100
+1) "e2"
+#只能正向索引
+127.0.0.1:6379> LRANGE keypush 11 100
+(empty array)
+```
+
+#### LTRIM
+
+```shell
+127.0.0.1:6379> LRANGE keypush 0 100
+ 1) "eset"
+ 2) "e"
+ 3) "eee"
+ 4) "e"
+ 5) "e"
+ 6) "e"
+ 7) "e"
+ 8) "e1"
+ 9) "e"
+10) "e2"
+#key 存在 保留范围之间的 闭区间 成功返回ok
+#注意 索引从0开始
+127.0.0.1:6379> LTRIM keypush  1 10
+OK
+127.0.0.1:6379> LRANGE keypush 0 -1
+1) "e"
+2) "eee"
+3) "e"
+4) "e"
+5) "e"
+6) "e"
+7) "e1"
+8) "e"
+9) "e2"
+```
+
+#### BLPOP
+
+#### BRPOP
+
+#### BRPOPLPUSH
+
+### 集合
+
+#### SADD
+
+```shell
+#将元素加入到集合key中， 如果已经存在忽略 返回新加入元素的个数
+127.0.0.1:6379> SADD keyset a b c d
+(integer) 4
+127.0.0.1:6379> SMEMBERS keyset
+1) "d"
+2) "c"
+3) "b"
+4) "a"
+127.0.0.1:6379> sadd keyset a e f
+(integer) 2
+127.0.0.1:6379> SMEMBERS keyset
+1) "a"
+2) "f"
+3) "e"
+4) "c"
+5) "d"
+6) "b"
+127.0.0.1:6379> sadd keyset f a
+(integer) 0
+127.0.0.1:6379> SMEMBERS keyset
+1) "f"
+2) "e"
+3) "c"
+4) "d"
+5) "b"
+6) "a"
+```
+
+#### SISMEMBER
+
+```shell
+#判断元素是否存在于集合中，存在返回1 不存在返回0
+127.0.0.1:6379> SISMEMBER keyset a
+(integer) 1
+127.0.0.1:6379> SISMEMBER keyset g
+(integer) 0
+```
+
+#### SPOP
+
+```shell
+#移除并返回集合中一个或多个元素 count可选
+127.0.0.1:6379> SPOP keyset 0
+(empty array)
+127.0.0.1:6379> SPOP keyset 1
+1) "b"
+#key不存在时返回nil
+127.0.0.1:6379> SPOP keyset1
+(nil)
+127.0.0.1:6379> SPOP keyset1 1
+(empty array)
+```
+
+#### SRANDMEMBER
+
+```shell
+#key 存在 随机返回一个元素
+127.0.0.1:6379> SRANDMEMBER keyset
+"d"
+127.0.0.1:6379> SMEMBERS keyset
+1) "e"
+2) "c"
+3) "d"
+4) "a"
+#key 存在 随机返回一个数组（可能会存在重复元素） 数组个数为 可选参数count的绝对值
+127.0.0.1:6379> SRANDMEMBER keyset -3
+1) "e"
+2) "d"
+3) "e"
+127.0.0.1:6379> SRANDMEMBER keyset -5
+1) "c"
+2) "c"
+3) "d"
+4) "a"
+5) "a"
+127.0.0.1:6379> SRANDMEMBER keyset 5
+1) "e"
+2) "d"
+3) "c"
+4) "a"
+```
+
+#### SREM
+
+```shell
+#key存在 移除指定元素 不存在忽略 返回移除成功的个数
+127.0.0.1:6379> SREM keyset g
+(integer) 0
+127.0.0.1:6379> SREM keyset g a
+(integer) 1
+127.0.0.1:6379> SMEMBERS keyset
+1) "e"
+2) "c"
+3) "d"
+```
+
+#### SMOVE
+
+```shell
+127.0.0.1:6379> SMEMBERS keyset
+1) "e"
+2) "c"
+3) "d"
+#key类型不匹配时报错
+127.0.0.1:6379> SMOVE keyset keydes a
+(error) WRONGTYPE Operation against a key holding the wrong kind of value
+#将key中的元素转移到指定的key中 成功返回1 失败返回0
+127.0.0.1:6379> SMOVE keyset keymovedes e
+(integer) 1
+127.0.0.1:6379> SMOVE keyset keymovedes a
+(integer) 0
+127.0.0.1:6379> SMEMBERS keyset
+1) "c"
+2) "d"
+127.0.0.1:6379> SMEMBERS keymovedes
+1) "e"
+```
+
+#### SCARD
+
+```shell
+#key存在 返回集合中的元素数量
+127.0.0.1:6379> SCARD keyset
+(integer) 2
+#key不存在 返回0
+127.0.0.1:6379> SCARD keyset1
+(integer) 0
+```
+
+#### SMEMBERS
+
+```shell
+#key存在 返回集合的所有元素
+127.0.0.1:6379> SMEMBERS keyset
+1) "c"
+2) "d"
+#key不存在 返回空
+127.0.0.1:6379> SMEMBERS keyset1
+(empty array)
+```
+
+#### SINTER
+
+```shell
+127.0.0.1:6379> SMEMBERS keyset
+1) "c"
+2) "d"
+127.0.0.1:6379> SMEMBERS keyset1
+1) "d"
+2) "c"
+3) "b"
+4) "a"
+#返回指定集合中的交集 当key不存在时当空集合处理
+127.0.0.1:6379> SINTER keyset keyset1
+1) "c"
+2) "d"
+```
+
+#### SINTERSTORE
+
+```shell
+127.0.0.1:6379> SMEMBERS keydesc
+1) "a"
+#将两个集合的交集存储在指定的集合中 返回交集的个数
+127.0.0.1:6379> SINTERSTORE keydesc keyset keyset1
+(integer) 2
+127.0.0.1:6379> SMEMBERS keydesc
+1) "d"
+2) "c"
+```
+
+#### SUNION
+
+并集
+
+#### SUNIONSTORE
+
+并集
+
+#### SDIFF
+
+```shell
+#返回给定集合的差集 以第一个key作为基准 判断第二个key
+127.0.0.1:6379> SMEMBERS keyset
+1) "c"
+2) "d"
+3) "a"
+127.0.0.1:6379> SMEMBERS keydesc
+1) "e"
+2) "d"
+3) "c"
+4) "a"
+127.0.0.1:6379> SDIFF keyset keydesc
+(empty array)
+127.0.0.1:6379> SDIFF keydesc keyset
+1) "e"
+```
+
+#### SDIFFSTORE
+
+```shell
+#将指定集合的差集存储到指定集合 res 中
+127.0.0.1:6379> SDIFFSTORE res keydesc keyset
+(integer) 1
+127.0.0.1:6379> SMEMBERS res
+1) "e"
+```
+
