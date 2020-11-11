@@ -960,3 +960,342 @@ OK
 1) "e"
 ```
 
+### 有序集合
+
+#### ZADD
+
+```shell
+#key不存在创建 并返回新添加的元素 score可以是整数值或者浮点数值 有序集合score可以重复 member不能重复
+127.0.0.1:6379> ZADD keyzadd 1 a
+(integer) 1
+127.0.0.1:6379> ZADD keyzadd 2 b
+(integer) 1
+127.0.0.1:6379> ZADD keyzadd 4 d
+(integer) 1
+127.0.0.1:6379> ZADD keyzadd 3 c
+(integer) 1
+127.0.0.1:6379> ZRANGE keyzadd 0 -1
+1) "a"
+2) "b"
+3) "c"
+4) "d"
+127.0.0.1:6379> ZRANGE keyzadd 0 -1 WITHSCORES
+1) "a"
+2) "1"
+3) "b"
+4) "2"
+5) "c"
+6) "3"
+7) "d"
+8) "4"
+127.0.0.1:6379> ZADD keyzaa 6 a
+(integer) 1
+#key不存在创建 score存在根据score更新位置并重新插入不计入返回结果（新增） socre存在并score不变忽略
+127.0.0.1:6379> ZADD keyzaa 6 a 2 b
+(integer) 1
+127.0.0.1:6379> ZRANGE keyzadd 0 -1 WITHSCORES
+1) "a"
+2) "1"
+3) "b"
+4) "2"
+5) "c"
+6) "3"
+7) "d"
+8) "4"
+127.0.0.1:6379> ZADD keyzadd 6 a 2 b
+(integer) 0
+127.0.0.1:6379> ZRANGE keyzadd 0 -1 WITHSCORES
+1) "b"
+2) "2"
+3) "c"
+4) "3"
+5) "d"
+6) "4"
+7) "a"
+8) "6"
+```
+
+#### ZSCORE
+
+```shell
+#返回key中member对应的score
+127.0.0.1:6379> ZSCORE keyzadd a
+"6"
+#key不存在或者member不存在 返回nil
+127.0.0.1:6379> ZSCORE keyzadd f
+(nil)
+```
+
+#### ZINCRBY
+
+```shell
+127.0.0.1:6379> ZRANGE keyzadd 0 -1 WITHSCORES
+1) "b"
+2) "2"
+3) "c"
+4) "3"
+5) "d"
+6) "4"
+7) "a"
+8) "6"
+#key存在 member存在 给member对应的score增加上增量 返回新的score 字符串格式
+127.0.0.1:6379> ZINCRBY keyzadd 5 b
+"7"
+127.0.0.1:6379> ZRANGE keyzadd 0 -1 WITHSCORES
+1) "c"
+2) "3"
+3) "d"
+4) "4"
+5) "a"
+6) "6"
+7) "b"
+8) "7"
+127.0.0.1:6379> ZINCRBY keyzadd 5 f
+"5"
+127.0.0.1:6379> ZRANGE keyzadd 0 -1 WITHSCORES
+ 1) "c"
+ 2) "3"
+ 3) "d"
+ 4) "4"
+ 5) "f"
+ 6) "5"
+ 7) "a"
+ 8) "6"
+ 9) "b"
+10) "7"
+127.0.0.1:6379> ZINCRBY keyzadd 5 e
+"5"
+#score可以存在多个
+127.0.0.1:6379> ZRANGE keyzadd 0 -1 WITHSCORES
+ 1) "c"
+ 2) "3"
+ 3) "d"
+ 4) "4"
+ 5) "e"
+ 6) "5"
+ 7) "f"
+ 8) "5"
+ 9) "a"
+10) "6"
+11) "b"
+12) "7"
+#member不能同时存在多个,只能唯一
+127.0.0.1:6379> ZINCRBY keyzadd 6 e
+"11"
+127.0.0.1:6379> ZRANGE keyzadd 0 -1 WITHSCORES
+ 1) "c"
+ 2) "3"
+ 3) "d"
+ 4) "4"
+ 5) "f"
+ 6) "5"
+ 7) "a"
+ 8) "6"
+ 9) "b"
+10) "7"
+11) "e"
+12) "11"
+```
+
+#### ZCARD
+
+```shell
+#key存在 返回基数（个数）
+127.0.0.1:6379> ZCARD keyzadd
+(integer) 6
+#key不存在 返回0
+127.0.0.1:6379> ZCARD keyzadd1
+(integer) 0
+```
+
+#### ZCOUNT
+
+```shell
+#返回key中 score区间的member个数 闭区间
+127.0.0.1:6379> ZCOUNT keyzadd 4 6
+(integer) 3
+127.0.0.1:6379> ZRANGE keyzadd 0 -1 WITHSCORES
+ 1) "c"
+ 2) "3"
+ 3) "d"
+ 4) "4"
+ 5) "f"
+ 6) "5"
+ 7) "a"
+ 8) "6"
+ 9) "b"
+10) "7"
+11) "e"
+12) "11"
+```
+
+#### ZRANGE
+
+```shell
+#key存在 返回score区间的成员 递增 WITHSCORES可选 依次返回成员和score 下标从0开始 -1代表尾部
+127.0.0.1:6379> ZRANGE keyzadd 0 -1 WITHSCORES
+ 1) "c"
+ 2) "3"
+ 3) "d"
+ 4) "4"
+ 5) "f"
+ 6) "5"
+ 7) "a"
+ 8) "6"
+ 9) "b"
+10) "7"
+11) "e"
+12) "11"
+127.0.0.1:6379> ZRANGE keyzadd 0 -1
+1) "c"
+2) "d"
+3) "f"
+4) "a"
+5) "b"
+6) "e"
+```
+
+#### ZREVRANGE
+
+递减返回结果
+
+#### ZRANGBYSCORE
+
+递增返回score介于min和max之间的成员 闭区间
+
+#### ZREVRANGESCORE
+
+递减返回score介于min和max之间的成员 闭区间
+
+#### ZRANK
+
+```shell
+127.0.0.1:6379> ZRANGE keyzadd 0 -1 WITHSCORES
+ 1) "c"
+ 2) "3"
+ 3) "d"
+ 4) "4"
+ 5) "f"
+ 6) "5"
+ 7) "a"
+ 8) "6"
+ 9) "b"
+10) "7"
+11) "e"
+12) "11"
+#返回元素递增排序 排序从0开始 
+127.0.0.1:6379> ZRANK keyzadd f
+(integer) 2
+#元素不存在 返回nil
+127.0.0.1:6379> ZRANK keyzadd g
+(nil)
+```
+
+#### ZREVRANK
+
+递减输出排序位次
+
+#### ZREM
+
+```shell
+127.0.0.1:6379> ZRANGE keyzadd 0 -1 WITHSCORES
+ 1) "c"
+ 2) "3"
+ 3) "d"
+ 4) "4"
+ 5) "f"
+ 6) "5"
+ 7) "a"
+ 8) "6"
+ 9) "b"
+10) "7"
+11) "e"
+12) "11"
+#移除key中元素 不存在元素忽略 返回成功移除元素的个数
+127.0.0.1:6379> ZREM keyzadd c d
+(integer) 2
+127.0.0.1:6379> ZRANGE keyzadd 0 -1 WITHSCORES
+1) "f"
+2) "5"
+3) "a"
+4) "6"
+5) "b"
+6) "7"
+7) "e"
+8) "11"
+127.0.0.1:6379> ZREM keyzadd g
+(integer) 0
+```
+
+#### ZREMRANGEBYRANK
+
+移除排名区间的元素 闭区间
+
+#### ZREMRANGEBYSCORE
+
+移除score区间的元素 闭区间
+
+### 位图
+
+#### SETBIT
+
+```shell
+#设置或清除key所存储字符串中指定偏移量上的位（bit） 1设置0清除
+#偏移量必须大于0
+#返回指定偏移量之前的位
+#设置
+127.0.0.1:6379> SETBIT keysetbit 100 1
+(integer) 0
+127.0.0.1:6379> GETBIT keysetbit 100
+(integer) 1
+#清除
+127.0.0.1:6379> SETBIT keysetbit 100 0
+(integer) 1
+127.0.0.1:6379> GETBIT keysetbit 100
+(integer) 0
+```
+
+#### GETBIT
+
+```shell
+#返回字符串中偏移量的位
+127.0.0.1:6379> SETBIT keysetbit 100 1
+(integer) 0
+127.0.0.1:6379> GETBIT keysetbit 100
+(integer) 1
+```
+
+#### BITCOUNT
+
+```shell
+#返回设置为1的位的数量
+127.0.0.1:6379> BITCOUNT keysetbit
+(integer) 2
+```
+
+#### BITPOS
+
+```shell
+#返回第一个位为值的二进制的位置
+127.0.0.1:6379> BITPOS keysetbit 1
+(integer) 100
+```
+
+#### BITOP
+
+```
+
+```
+
+### Redis内存统计
+
+
+
+
+
+
+
+
+
+
+
