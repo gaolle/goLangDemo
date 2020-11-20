@@ -1,3 +1,5 @@
+# Redis
+
 ## docker安装redis
 
 查看可用版本
@@ -1283,19 +1285,96 @@ OK
 
 #### BITOP
 
+```shell
+127.0.0.1:6379> SETBIT keysetbit1 100 1
+(integer) 0
+127.0.0.1:6379> SETBIT keysetbit1 101 1
+(integer) 0
+127.0.0.1:6379> GETBIT keysetbit1 100
+(integer) 1
+127.0.0.1:6379> GETBIT keysetbit1 101
+(integer) 1
+127.0.0.1:6379> GETBIT keysetbit 101
+(integer) 1
+127.0.0.1:6379> GETBIT keysetbit 100
+(integer) 0
+#对多个key进行元操作
+#AND 与 OR 或 XOR 异或
+#NOT 对key取反存到一个key中
+#返回存取key的字符串的长度
+127.0.0.1:6379> BITOP AND destkey keysetbit keysetbit1
+(integer) 13
+127.0.0.1:6379> GETBIT destkey 100
+(integer) 0
+127.0.0.1:6379> GETBIT destkey 101
+(integer) 1
 ```
 
+# mongoDB
+
+查看可用版本
+
+```shell
+docker search mongo
 ```
 
-### Redis内存统计
+拉取最新
 
+```shell
+docker pull mongo:latest
+```
 
+查看本地镜像
 
+```shell
+docker images
+```
 
+运行redis容器
 
+```shell
+docker run -itd --name mongo-learn -p 27017:27017 mongo
+```
 
+查看容器的运行信息
 
+```shell
+docker ps 
+```
 
+连接redis服务
+
+```shell
+docker exec -it mongo-learn mongo
+```
+
+#### 查询数据库
+
+db
+
+#### 选择数据库
+
+use dbname
+
+#### 查询数据库中的集合
+
+show collections
+
+插入数据时，_id 没有选择性插入，数据库将自己创建一个唯一 （类似主键）
+
+集合通过_id排序
+
+数据库名不区分大小写
+
+BSON 最大 16MB 嵌套不超过100层
+
+更新数据时，_id字段不能更新 设置upsert:true不存在时插入新的collection
+
+索引 除主键外还可以创建其他的索引 底层数据结构为B树 索引创建不能重命名，只能删除当前索引然后重新创建新的索引
+
+1：升序 -1：降序
+
+多个索引匹配时，顺序必须一致 多索引不超过32个
 
 
 
